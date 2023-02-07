@@ -5,6 +5,9 @@ Inspired by old point&shoots that had a setting to add timestamps to pictures. T
 Other variables:
 
 Logo scale: The logo will take up 1/x of the x-axis
+
 Image padding: Can be increased to raise the logo further up from the timestamp
+
 Text size: Changes the size of the timestamp
+
 Text padding: Can be increased to raise the timestamp further up from the bottom edge

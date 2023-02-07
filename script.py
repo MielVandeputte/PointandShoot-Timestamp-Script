@@ -11,9 +11,11 @@ text_size = int(input('Text size (recommended value is 64): ') or '64')
 text_padding = int(input('Text padding (recommended value is 35): ') or '35')
 
 logo_file = input('Logo file path: ') or 'logo.png'
+font_file = input('Font file path: ') or 'OpenSans-SemiBold.ttf'
 
 try:
     logo = Image.open(logo_file)
+    font = ImageFont.truetype(font_file, text_size)
 
     print('\nTimestamp adder script started...\n')
 
@@ -35,7 +37,6 @@ try:
 
                 datetime_form = datetime.strptime(datetime_str, '%Y:%m:%d %H:%M:%S').strftime('%d.%m.%Y %H:%M')
 
-                font = ImageFont.truetype('OpenSans-SemiBold.ttf', text_size)
                 img_editable = ImageDraw.Draw(img)
 
                 text_box = font.getbbox(datetime_form)

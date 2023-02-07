@@ -4,8 +4,11 @@ from PIL import Image, ImageFont, ImageDraw
 from datetime import datetime
 from tqdm import tqdm
 
-scale = int(input('Logo scale (recommended value is 5): '))
-text_size = int(input('Text size (recommended value is 64): '))
+img_scale = int(input('Logo scale (recommended value is 5): ') or '5')
+img_padding = int(input('Image padding (recommended value is 20): ') or '20')
+
+text_size = int(input('Text size (recommended value is 64): ') or '64')
+text_padding = int(input('Text padding (recommended value is 35): ') or '35')
 
 print('\nTimestamp adder script started...')
 logo = Image.open('logo.png')
@@ -31,13 +34,15 @@ for file in tqdm(os.listdir('.')):
             font = ImageFont.truetype('OpenSans-SemiBold.ttf', text_size)
             img_editable = ImageDraw.Draw(img)
 
-            text_width, text_height = img_editable.textbbox(datetime_form, font=font)
+            text_box = font.getbbox(datetime_form)
+            text_width = text_box[2] - text_box[0]
+            text_height = text_box[3] - text_box[1]
 
-            img_editable.text((math.floor(img.size[0]/2 - text_width/2), img.size[1] - 20 - text_height), datetime_form, fill=(255, 255, 255), stroke_fill=(0, 0, 0), stroke_width=2, font=font)
+            img_editable.text((math.floor(img.size[0]/2 - text_width/2), img.size[1] - text_padding - text_height), datetime_form, fill=(255, 255, 255), stroke_fill=(0, 0, 0), stroke_width=2, font=font)
 
             # Add logo
-            logo = logo.resize((math.floor(img.size[0]/scale), math.floor(img.size[0]/scale*logo.size[1]/logo.size[0])))
-            img.paste(logo, (math.floor(img.size[0]/2 - logo.size[0]/2), img.size[1] - logo.size[1] - 20 - text_height), logo)
+            logo = logo.resize((math.floor(img.size[0]/img_scale), math.floor(img.size[0]/img_scale*logo.size[1]/logo.size[0])))
+            img.paste(logo, (math.floor(img.size[0]/2 - logo.size[0]/2), img.size[1] - logo.size[1] - img_padding - text_height), logo)
 
             # Save modified image
             if not os.path.exists('result'):
@@ -46,4 +51,4 @@ for file in tqdm(os.listdir('.')):
             img.save(f'result/{file}')
         
         except Exception as e:
-            pass
+            tqdm.write(f'Problem encoutered while processing {file}:\t{str(e)}')
